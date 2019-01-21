@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript控制SVG蒙板在指定区域左右来回移动动画</title>
+</head>
+
+<body>
+    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <mask id="small-rect">
+                <rect id='rect-mask1' width="50" height="50" fill='white' style='opacity:0.8' x="400" y="200"></rect>
+                <rect id='rect-mask2' width="100" height="100" fill="white" x="0" y="100"></rect>
+            </mask>
+        </defs>
+        <rect id="back" x="0" y="0" width="400" height="300" fill="#d4fcff"></rect>
+        <rect id="front" x="0" y="0" width="400" height="300" fill="#fcd3db" mask="url(#small-rect)"></rect>
+    </svg>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            function animation($mask, step = 10, direction = 'right') {
+                if (!$mask) {
+                    return;
+                }
+                const x = parseFloat($mask.getAttribute('x'));
+                const width = parseFloat($mask.getAttribute('width'));
+
+                if (direction == 'right') {
+                    if (x + width + step >= 400) {
+                        direction = 'left';
+                        $mask.setAttribute('x', 400 - width);
+                    } else if (x + width + step < 400) {
+                        $mask.setAttribute('x', x + step);
+                    }
+                } else if (direction) {
+                    if (x == 0) {
+                        direction = 'right';
+                    } else {
+                        $mask.setAttribute('x', x - step <= 0 ? 0 : x - step);
+                    }
+                }
+
+                requestAnimationFrame((($mask, step, direction) => {
+                    return () => {
+                        animation($mask, step, direction);
+                    }
+                })($mask, step, direction));
+            }
+
+            animation(document.querySelector('#rect-mask1'));
+            animation(document.querySelector('#rect-mask2'));
+
+
+        });
+    </script>
+</body>
+
+</html>
