@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SVG 蒙板实现渐变</title>
+</head>
+
+<body>
+    <h4>从左上角向右下角进行渐变，从模糊到清晰</h4>
+    <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- 从左上角向右下角进行渐变，从模糊到清晰 -->
+            <linearGradient id="linear-color" x1='0' y1='0' x2='1' y2='1'>
+                <stop offset="0%" stop-color="white" />
+                <stop offset="100%" stop-color="black" />
+            </linearGradient>
+            <mask id="linear-color-mask">
+                <rect x="0" y="0" width="100%" height="100%" style="fill:url(#linear-color)" />
+            </mask>
+        </defs>
+        <rect x="0" y="0" width="400" height="400" style="fill:crimson" />
+        <rect x="0" y="0" width="400" height="400" style="fill:turquoise;mask:url(#linear-color-mask)" />
+    </svg>
+</body>
+
+</html>
